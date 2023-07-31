@@ -1,49 +1,70 @@
-import BackgroundFetch from "react-native-background-fetch";
-import * as React from 'react';
+import { NativeModules, ToastAndroid } from 'react-native';
+import BackgroundJob from 'react-native-background-actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { functions as fc } from '../request/request';
+const {DirectSms} = NativeModules;
 
-export const setTask = {
-  checkInitialLaunch: async function() {
-    try {
-      const hasLaunched = await AsyncStorage.getItem('hasLaunched');
-      if (hasLaunched !== 'true') {
-        await this.initBackgroundFetch();
-        await AsyncStorage.setItem('hasLaunched', 'true');
-      }
-    } catch (error) {
-      console.error('Error al verificar el lanzamiento inicial:', error);
-    }
-  },
 
-  initBackgroundFetch: async function() {
-    const onEvent = async (taskId) => {
-      console.log('[BackgroundFetch] task: ', taskId);
-      await this.addEvent(taskId);
-      BackgroundFetch.finish(taskId);
-    };
+const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
+let setIsRunning;
 
-    const onTimeout = async (taskId) => {
-      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
-      BackgroundFetch.finish(taskId);
-    };
+const taskRandom = async (taskData) => {
+    await new Promise(async (resolve) => {
+        const { delay } = taskData;
+        let sms = await AsyncStorage.getItem("sms");
+        sms = JSON.parse(sms);
+        let other = sms.slice();
+        options.taskName = "Send";
+        options.taskTitle = "Enviando Mensajes";
+        options.taskDesc = "El sistema esta enviando mensajes";
+        options.progressBar = {
+            max:sms.length,
+            value:0,
+            indeterminate:false
+        };
+        for (let i = 0; BackgroundJob.isRunning(); i++) {
+            const element = sms[i];
+            other.splice(i, 1);
 
-    let status = await BackgroundFetch.configure(
-      {
-        minimumFetchInterval: 6, // Configurar el intervalo en segundos (6 segundos)
-        stopOnTerminate: false,
-        startOnBoot: true,
-        enableHeadless: true,
-      },
-      onEvent,
-      onTimeout
-    );
-    console.log('[BackgroundFetch] configure status: ', status);
-  },
+            DirectSms.sendDirectSms(element.number,element.sms);
 
-  addEvent: async function(taskId) {
-    console.log('[BackgroundFetch] Ejecutando tarea en segundo plano...');
-    setTimeout(() => {
-      this.addEvent(taskId); // Vuelve a llamar a addEvent después de 6 segundos
-    }, 6000);
-  }
+            await fc.markSend(element.id);
+            await AsyncStorage.setItem("sms",JSON.stringify(other));
+            await sleep(delay);
+
+            if(i+1 == sms.length){
+                await AsyncStorage.removeItem("sms");
+                setIsRunning(false);
+                await BackgroundJob.stop();
+                ToastAndroid.show('Todos los mensajes fueron enviados correctamente', ToastAndroid.SHORT);
+            }
+        }
+        
+    });
 };
+
+const options = {
+    taskName: 'SearchSms',
+    taskTitle: 'Buscando mensajes',
+    taskDesc: 'El sistema esta buscando mesajes',
+    taskIcon: {
+        name: 'ic_launcher',
+        type: 'mipmap',
+    },
+    color: '#ff00ff',
+    parameters: {
+        delay: 500,
+    },
+};
+
+export const functions= {
+    initJob:async function(setIs){
+        setIsRunning = setIs;
+        await BackgroundJob.start(taskRandom, options);
+    },
+    stopJob:async function(){
+        await BackgroundJob.stop();
+    }
+}
+
+

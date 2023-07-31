@@ -1,19 +1,14 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, useColorScheme, useWindowDimensions } from "react-native";
+import { Text, View, Image, StyleSheet, useWindowDimensions } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import HomeScreen from '../HomeScreen';
 import DetailScreen from '../DetailScreen';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import  StartToSend  from "./StartToSend";
 
 export default function Navbar(){
     const windowDimensions = useWindowDimensions();
     const isPortrait = windowDimensions.height > windowDimensions.width;
     const Tab = createBottomTabNavigator();
-    const isDarkMode = useColorScheme() === 'dark';
-
-    const backgroundStyle = {
-        backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    };
 
     function LogoTitle() {
         return (
@@ -22,7 +17,7 @@ export default function Navbar(){
               style={styles.image}
               source={require('../../public/logo.png')}
             />
-            <Text style={styles.text}>Whatsive Api</Text>
+            <Text style={styles.text}>Whatsive SMS</Text>
           </View>
         );
     }
@@ -54,7 +49,7 @@ export default function Navbar(){
                 }
             })}
         >
-            <Tab.Screen name="Home" options={{ title: ()=>{return(<Text style={{fontWeight: 'bold'}}>{isPortrait?("Inicio"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} /> }} component={HomeScreen} />
+            <Tab.Screen name="Home" options={{ title: ()=>{return(<Text style={{fontWeight: 'bold'}}>{isPortrait?("Inicio"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} />,headerRight:() => <StartToSend/>, }} component={HomeScreen} />
             <Tab.Screen name="Detail" options={{title: ()=>{return(<Text style={{fontWeight: 'bold'}}>{isPortrait?("Configuración"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} /> }} component={DetailScreen} />
         </Tab.Navigator>
     ); 

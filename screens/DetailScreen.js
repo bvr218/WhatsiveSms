@@ -13,7 +13,7 @@ function DetailScreen() {
   const [key,setKey] = useState("");
   const IdInput = useRef(null);
   const TokenInput = useRef(null);
-  const { setIsLoading } = useContext(Context);
+  const { setIsLoading, setIsReady } = useContext(Context);
 
   useEffect(()=>{
     AsyncStorage.getItem('port').then((value) => {
@@ -42,6 +42,7 @@ function DetailScreen() {
         if(request.response.salida == "exito"){
           AsyncStorage.setItem('port', port);
           AsyncStorage.setItem('key', key);
+          setIsReady(true);
           ToastAndroid.show('Datos guardados correctamente', ToastAndroid.SHORT);
         }else{
           Alert.alert(
@@ -91,15 +92,7 @@ function DetailScreen() {
       if(result === RESULTS.GRANTED){
         ToastAndroid.show('Permiso para enviar SMS concedido', ToastAndroid.SHORT);
       }else{
-        Alert.alert(
-          'Sin permisos',
-          'Aun no estamos listos para enviar mensajes, presiona aceptar y configura los permisos.',
-          [
-            { text: 'Aceptar', onPress: solicitarPermisos },
-            { text: 'Cancelar', onPress: ()=>{} },
-          ],
-          { cancelable: true }
-        );
+        solicitarPermisos()
       }
     } catch (error) {
       console.warn('Error al solicitar permisos:', error);
