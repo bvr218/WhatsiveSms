@@ -1,5 +1,5 @@
 import React,{useEffect, useContext} from 'react';
-import { View, Text, useColorScheme, ScrollView,ToastAndroid } from 'react-native';
+import { View, Text, useColorScheme, ScrollView,ToastAndroid, Linking  } from 'react-native';
 import { Button } from '@rneui/themed';
 import ViewNetwork  from './navigation/ViewNetwork';
 import { Context } from './context/Context';
@@ -12,10 +12,37 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
+
+
+const configureLinkingURI = async () => {
+  const linkingURI = 'whatsapp://';
+
+  const isSupported = await Linking.canOpenURL(linkingURI);
+
+  if (isSupported) {
+    Linking.addEventListener('url', handleDeepLink);
+  } else {
+    console.log(`El enlace URI ${linkingURI} no es compatible en este dispositivo.`);
+  }
+};
+
+const handleDeepLink = (event) => {
+  const url = event.url;
+  console.log('URI abierto:', url);
+};
+
+
+
+
 function HomeScreen({ navigation }) {
   const { setIsReady, setIsRunning, setIsLoading } = useContext(Context);
   useEffect(()=>{
     ViewNetwork(setIsReady,setIsRunning,navigation);
+    configureLinkingURI();
+    return () => {
+      // Eliminar la suscripción al desmontar el componente
+      Linking.removeEventListener('url', handleDeepLink);
+    };
   },[])
 
   const cargarMensajes = async ()=>{
