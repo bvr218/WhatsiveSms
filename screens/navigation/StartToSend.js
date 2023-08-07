@@ -1,12 +1,23 @@
-import React,{ useContext } from "react";
+import React,{ useContext, useEffect } from "react";
 import {functions as fc} from "../../task/setTask";
 import { View, Image, ToastAndroid } from 'react-native';
 import { Button } from '@rneui/themed';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../context/Context';
+
 
 export default function StartToSend(){ 
     const { isRunning, setIsRunning, isReady } = useContext(Context);
-    const handlePress = ()=>{
+    const initial = async function(){
+        setIsRunning(false);
+    }
+    useEffect(()=>{
+        initial();
+        if(!isReady){
+            fc.stopJob();
+        }
+    },[isReady])
+    const handlePress =async ()=>{
         if(!isRunning){
             ToastAndroid.show('Enviando mensajes en segundo plano', ToastAndroid.SHORT);
             fc.initJob(setIsRunning);
@@ -16,6 +27,7 @@ export default function StartToSend(){
             fc.stopJob();
         }
         setIsRunning(!isRunning);
+
     }
     return(<View>
             <Button onPress={handlePress} disabled={!isReady} color={!isRunning?("success"):("error")} icon={!isRunning?(<Image

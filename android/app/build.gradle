@@ -83,20 +83,20 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('my-release-key.keystore') // Ruta a tu archivo de keystore
-            storePassword 'Holamundo12' // Contraseña del keystore
-            keyAlias 'my-key-alias' // Alias de la clave
-            keyPassword 'Holamundo12' // Contraseña de la clave
+            storeFile file('C:/Users/mirom/.android/whatsive.keystore') // Ruta a tu archivo de keystore
+            storePassword 'Holamundo@12' // Contraseña del keystore
+            keyAlias 'whatsive' // Alias de la clave
+            keyPassword 'Holamundo@12' // Contraseña de la clave
         }
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
             // see https://reactnative.dev/docs/signed-apk-android.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }

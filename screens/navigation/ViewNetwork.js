@@ -12,6 +12,7 @@ export default async function ViewNetwork(setIsReady, setIsRunning,navigation){
     if(!permisos){
         setIsReady(false);
         setIsRunning(false);
+        
         Alert.alert(
             'Sin permisos',
             'No tenemos permiso para enviar mensajes, configura los permisos primero.',
@@ -26,12 +27,14 @@ export default async function ViewNetwork(setIsReady, setIsRunning,navigation){
             ToastAndroid.show('No ha configurado el id o el token de istancia', ToastAndroid.SHORT);
             setIsReady(false);
             setIsRunning(false);
+            
 
         }else{
-            fc.validaInstancia(port,key).then((request)=>{
+            fc.validaInstancia(port,key).then(async (request)=>{
                 if(request.salida=="error"){
                     ToastAndroid.show('No hay conexión a internet', ToastAndroid.SHORT);
                     setIsReady(false);
+                    
                     setIsRunning(false);
             
                 }else{
@@ -40,6 +43,7 @@ export default async function ViewNetwork(setIsReady, setIsRunning,navigation){
                     }else{
                         ToastAndroid.show('Error de isntancia: '+request.response.message, ToastAndroid.SHORT);
                         setIsReady(false);
+                        
                         setIsRunning(false);
                     }
                 }
