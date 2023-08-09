@@ -26,7 +26,7 @@ function DetailScreen() {
   const saveChanges = async ()=>{
     setIsLoading(true);
     
-    if(port && key){
+    if(port !="" && key != "" && port !=null && key != null && port !=undefined && key != undefined){
       let request = await fc.validaInstancia(port,key);
       setIsLoading(false);
       if(request.salida=="error"){
@@ -56,6 +56,7 @@ function DetailScreen() {
         }
       }
     }else{
+      setIsLoading(false);
       if(!port){
         IdInput.current.focus();
       }else{
