@@ -9,46 +9,42 @@ const sleep = (time) => new Promise((resolve) => setTimeout(() => resolve(), tim
 let setIsRunning;
 
 const sendMessages = async (taskData) => {
-    await new Promise(async (resolve) => {
-        const { delay } = taskData;
-        let sms = await AsyncStorage.getItem("sms");
-        sms = JSON.parse(sms);
-        
-        if(sms?.length==0 || sms == undefined || sms== null){
-            if(BackgroundJob.isRunning()){
-                try {
-                    await AsyncStorage.removeItem("sms");
-                } catch (error) {
-                }
-                ToastAndroid.show('Todos los mensajes fueron enviados correctamente', ToastAndroid.SHORT);
+    const { delay } = taskData;
+    let sms = await AsyncStorage.getItem("sms");
+    sms = JSON.parse(sms);
+    
+    if(sms?.length==0 || sms == undefined || sms== null){
+        if(BackgroundJob.isRunning()){
+            try {
+                await AsyncStorage.removeItem("sms");
+            } catch (error) {
+                return false;
             }
-        }else{
-
-            await BackgroundJob.updateNotification({taskIcon:{name:"box",type:"mipmap"}, taskName:"Send",taskTitle:"Enviando Mensajes",taskDesc:"El sistema esta enviando mensajes",progressBar:{max:sms.length,value:0,indeterminate:false}});
-            let other = sms.slice();
-            for (let i = 0; BackgroundJob.isRunning(); i++) {
-                await BackgroundJob.updateNotification({taskIcon:{name:i%2==0?("delivery"):("box"),type:"mipmap"},progressBar:{max:sms.length,value:i+1,indeterminate:false}});
-
-                const element = sms[i];
-                other.splice(i, 1);
-    
-                DirectSms.sendDirectSms(element.number,element.sms);
-    
-                await fc.markSend(element.id);
-                await AsyncStorage.setItem("sms",JSON.stringify(other));
-                await sleep(delay);
-    
-                if(i+1 == sms.length){
-                    BackgroundJob.updateNotification(options);
-                    await AsyncStorage.removeItem("sms");
-                    ToastAndroid.show('Todos los mensajes fueron enviados correctamente', ToastAndroid.SHORT);
-                    return true;
-                }
-            }
+            ToastAndroid.show('Todos los mensajes fueron enviados correctamente', ToastAndroid.SHORT);
+            return false;
         }
-        
-        return true;
-    });
+    }else{
+
+        await BackgroundJob.updateNotification({taskIcon:{name:"box",type:"mipmap"}, taskName:"Send",taskTitle:"Enviando Mensajes",taskDesc:"El sistema esta enviando mensajes",progressBar:{max:sms.length,value:0,indeterminate:false}});
+        let other = sms.slice();
+        for (let i = 0; i<sms.length; i++) {
+            await BackgroundJob.updateNotification({taskIcon:{name:i%2==0?("delivery"):("box"),type:"mipmap"},progressBar:{max:sms.length,value:i+1,indeterminate:false}});
+            const element = sms[i];
+            other.splice(i, 1);
+
+            DirectSms.sendDirectSms(element.number,element.sms);
+
+            await fc.markSend(element.id);
+            await AsyncStorage.setItem("sms",JSON.stringify(other));
+            await sleep(delay);
+        }
+    }
+    
+    BackgroundJob.updateNotification(options);
+    await AsyncStorage.removeItem("sms");
+    ToastAndroid.show('Todos los mensajes fueron enviados correctamente', ToastAndroid.SHORT);
+    return true;
+
 };
 
 const cargarMensajes = async ()=>{
@@ -69,16 +65,14 @@ const cargarMensajes = async ()=>{
 }
 
 const SearchSms = async (taskData) => {
-    await new Promise(async (resolve) => {
-        while(BackgroundJob.isRunning()){
-            let mensajes =  await cargarMensajes();
-            if(mensajes > 0){
-                await sendMessages(taskData);
-                BackgroundJob.updateNotification({progressBar:{},taskTitle:"El sistema esta buscando mensajes",taskIcon:{name:"check_box",type:"mipmap"},color:"#ffffffff"});
-            }
-            await sleep(10000); 
+    while(BackgroundJob.isRunning()){
+        let mensajes =  await cargarMensajes();
+        if(mensajes > 0){
+            await sendMessages(taskData);
+            BackgroundJob.updateNotification({progressBar:{},taskTitle:"El sistema esta buscando mensajes",taskIcon:{name:"check_box",type:"mipmap"},color:"#ffffffff"});
         }
-    })
+        await sleep(5000); 
+    }
     return true;
 }
 

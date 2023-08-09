@@ -2,7 +2,6 @@ import React,{ useContext, useEffect } from "react";
 import {functions as fc} from "../../task/setTask";
 import { View, Image, ToastAndroid } from 'react-native';
 import { Button } from '@rneui/themed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Context } from '../context/Context';
 
 
