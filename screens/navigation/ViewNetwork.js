@@ -1,9 +1,10 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { functions as fc } from "../../request/request";
 import { ToastAndroid, Alert } from 'react-native';
+import moment from 'moment';
 import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 
-export default async function ViewNetwork(setIsReady, setIsRunning,navigation){
+export default async function ViewNetwork(setIsReady, setIsRunning, setLess ,navigation){
 
     const result = await check(PERMISSIONS.ANDROID.SEND_SMS);
     let permisos = result === RESULTS.GRANTED;
@@ -40,8 +41,13 @@ export default async function ViewNetwork(setIsReady, setIsRunning,navigation){
                 }else{
                     if(request.response.salida == "exito"){
                         setIsReady(true);
+                        console.log(request.response);
+                        const today = moment();
+                        const expiration = moment(request.response.vencimiento, "YYYY-MM-DD HH:mm:ss");
+                        const daysDifference = expiration.diff(today, 'days');
+                        setLess(daysDifference);
                     }else{
-                        ToastAndroid.show('Error de isntancia: '+request.response.message, ToastAndroid.SHORT);
+                        ToastAndroid.show('Error de instancia: '+request.response.message, ToastAndroid.SHORT);
                         setIsReady(false);
                         
                         setIsRunning(false);

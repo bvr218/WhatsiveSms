@@ -17,9 +17,9 @@ import {
 
 
 function HomeScreen({ navigation }) {
-  const { setIsReady, setIsRunning } = useContext(Context);
+  const { setIsReady, setIsRunning, less, setLess } = useContext(Context);
   useEffect(()=>{
-    ViewNetwork(setIsReady,setIsRunning,navigation);
+    ViewNetwork(setIsReady,setIsRunning,setLess,navigation);
   },[])
 
   
@@ -51,6 +51,11 @@ function HomeScreen({ navigation }) {
           <Text style={{fontSize:15}}>Recuerda registrarte en https://api.whatsive.com para obtener los datos de su instancia.</Text>
         </View>
         <InfoSend/>
+        <View style={{alignItems:"center", justifyContent:"center"}}>
+          {less<10?(<Text style={{fontSize:16, marginTop:60}}>La instancia vence en: <Text style={{color:"red"}}>{less}</Text> dias</Text>):(<></>)}
+          
+
+        </View>
       </View>
       <ModalI/>
     </ScrollView>

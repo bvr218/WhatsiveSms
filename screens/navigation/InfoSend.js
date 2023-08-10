@@ -22,13 +22,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         }
         setSend(sends);
 
-        let sms = await AsyncStorage.getItem('sms');
-        if(sms!=null && sms!=undefined){
-            sms = JSON.parse(sms);
-            setWait(sms.length);
+        sends = await fc.countWaitSms();
+        if(sends.salida == "exito"){
+            if(sends.response.salida == "exito"){
+                sends = sends.response.sms;
+            }else{
+                sends = 0;
+
+            }
         }else{
-            setWait(0);
+            sends = 0;
         }
+        setWait(sends);
     }
 
     useEffect(()=>{
