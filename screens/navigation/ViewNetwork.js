@@ -10,6 +10,7 @@ export default async function ViewNetwork(setIsReady, setIsRunning, setLess ,nav
     let permisos = result === RESULTS.GRANTED;
     let port = await AsyncStorage.getItem('port');
     let key = await  AsyncStorage.getItem('key');
+
     if(!permisos){
         setIsReady(false);
         setIsRunning(false);
@@ -41,7 +42,6 @@ export default async function ViewNetwork(setIsReady, setIsRunning, setLess ,nav
                 }else{
                     if(request.response.salida == "exito"){
                         setIsReady(true);
-                        console.log(request.response);
                         const today = moment();
                         const expiration = moment(request.response.vencimiento, "YYYY-MM-DD HH:mm:ss");
                         const daysDifference = expiration.diff(today, 'days');

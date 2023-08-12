@@ -27,6 +27,8 @@ function HomeScreen({ navigation }) {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    color: isDarkMode ? Colors.darker : Colors.lighter,
+
     alignItems: 'center',
   };
   return (

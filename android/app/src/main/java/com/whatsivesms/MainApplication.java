@@ -9,6 +9,7 @@ import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint;
 import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import java.util.List;
+//import com.dooboolab.RNIap.RNIapPackage;
 import com.whatsivesms.DirectSmsPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -27,6 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           packages.add(new DirectSmsPackage());
+          //packages.add(new RNIapPackage());
           return packages;
         }
 

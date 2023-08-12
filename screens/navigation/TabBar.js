@@ -34,7 +34,7 @@ export default function Navbar(){
                 headerTitleStyle: {
                     fontWeight: 'bold',
                 },
-                tabBarIcon: ({ focused, color, size }) => {
+                tabBarIcon: ({ focused }) => {
                     let iconSource;
                     if (route.name === 'Home') {
                       iconSource = focused

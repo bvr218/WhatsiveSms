@@ -2,9 +2,9 @@ import {useEffect,useState} from "react";
 import { View, Text } from "react-native";
 import styles from "../styles/HomeScreenStyles";
 import { functions as fc } from "../../request/request";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
  function InfoSend(){
+
     const [send, setSend] = useState(0);
     const [wait, setWait] = useState(0);
 
@@ -43,21 +43,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     },[])
 
     return(
-        <View style={styles.allContent}>
-            <View style={styles.boxInfo}>
-                <View style={styles.boxNumber}>
-                    <Text style={styles.number}>{send}</Text>
-                    <Text style={{textAlign:"center"}}>sms</Text>
+        <View>
+
+            <View style={styles.allContent}>
+                <View accessible={true} accessibilityLabel={send+" Mensajes enviados hoy"} style={styles.boxInfo}>
+                    <View style={styles.boxNumber}>
+                        <Text style={styles.number}>{send}</Text>
+                        <Text style={{textAlign:"center"}}>sms</Text>
+                    </View>
+                    <Text style={styles.textInfo}>Enviados hoy</Text>
                 </View>
-                <Text style={styles.textInfo}>Enviados hoy</Text>
-            </View>
-            <View style={styles.boxInfo}>
-                <View style={styles.boxNumber}>
-                    <Text style={styles.number}>{wait}</Text>
-                    <Text style={{textAlign:"center"}}>sms</Text>
+                <View accessible={true} accessibilityLabel={wait+" Mensajes pendientes de enviar"} style={styles.boxInfo}>
+                    <View style={styles.boxNumber}>
+                        <Text style={styles.number}>{wait}</Text>
+                        <Text style={{textAlign:"center"}}>sms</Text>
+                    </View>
+                    <Text style={styles.textInfo}>Sin enviar</Text>
                 </View>
-                <Text style={styles.textInfo}>Sin enviar</Text>
             </View>
+          
         </View>
         
     );

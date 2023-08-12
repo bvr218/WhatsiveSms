@@ -122,7 +122,7 @@ function DetailScreen() {
         <Text>2.Ingrese los datos de su instancia, recuerde que para poder acceder a este beneficio su instancia debe ser de pago.</Text>
         <View style={{justifyContent: 'center',alignItems: 'center'}}>
           <View style={styles.containerInputs}>
-            <View style={styles.containerDatos}>
+            <View accessible={true} accessibilityLabel="Doble click para editar el aidi de la instancia" style={styles.containerDatos}>
               <Text style={{width:70,top:10}}>ID:</Text>
               <TextInput
                 style={styles.input}
@@ -131,7 +131,7 @@ function DetailScreen() {
                 value={port}
               />
             </View>
-            <View style={styles.containerDatos}>
+            <View accessible={true} accessibilityLabel="Doble click para editar el token de la instancia" style={styles.containerDatos}>
               <Text style={{width:70,top:10}}>Token:</Text>
               <TextInput
                 style={styles.input}

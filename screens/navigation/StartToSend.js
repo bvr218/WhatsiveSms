@@ -29,7 +29,7 @@ export default function StartToSend(){
 
     }
     return(<View>
-            <Button onPress={handlePress} disabled={!isReady} color={!isRunning?("success"):("error")} icon={!isRunning?(<Image
+            <Button accessible={true} accessibilityLabel="Iniciar envio de mensajes" onPress={handlePress} disabled={!isReady} color={!isRunning?("success"):("error")} icon={!isRunning?(<Image
                                                                                 style={{width:20, height:20}}
                                                                                 source={require('../../public/shutdown.png')}
                                                                                 />):(<Image
