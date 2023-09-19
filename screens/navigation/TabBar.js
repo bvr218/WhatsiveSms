@@ -1,9 +1,10 @@
 import React from "react";
-import { Text, View, Image, StyleSheet, useWindowDimensions } from "react-native";
+import { Text, View, Image, StyleSheet, useWindowDimensions, useColorScheme } from "react-native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'; 
 import HomeScreen from '../HomeScreen';
 import DetailScreen from '../DetailScreen';
 import  StartToSend  from "./StartToSend";
+import TestScreen from "../TestScreen";
 
 export default function Navbar(){
     const windowDimensions = useWindowDimensions();
@@ -21,7 +22,7 @@ export default function Navbar(){
           </View>
         );
     }
-
+    const isDarkMode = useColorScheme() === 'dark';
     return(
         <Tab.Navigator
             screenOptions={({ route }) => ({
@@ -44,13 +45,18 @@ export default function Navbar(){
                       iconSource = focused
                         ? require('../../public/black_config.png')
                         : require('../../public/white_config.png');
+                    }else if (route.name === 'Test') {
+                      iconSource = focused
+                        ? require('../../public/chemical-black.png')
+                        : require('../../public/chemical-white.png');
                     }
                     return <Image source={iconSource} style={{ width: 30, height: 30 }} />;
                 }
             })}
         >
-            <Tab.Screen name="Home" options={{ title: ()=>{return(<Text style={{fontWeight: 'bold'}}>{isPortrait?("Inicio"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} />,headerRight:() => <StartToSend/>, }} component={HomeScreen} />
-            <Tab.Screen name="Detail" options={{title: ()=>{return(<Text style={{fontWeight: 'bold'}}>{isPortrait?("Configuración"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} /> }} component={DetailScreen} />
+            <Tab.Screen name="Home" options={{ title: ()=>{return(<Text style={{color: !isDarkMode ? "#000000" : "white", fontWeight: 'bold'}}>{isPortrait?("Inicio"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} />,headerRight:() => <StartToSend/>, }} component={HomeScreen} />
+            <Tab.Screen name="Test" options={{title: ()=>{return(<Text style={{color: !isDarkMode ? "#000000" : "white",fontWeight: 'bold'}}>{isPortrait?("Probar"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} /> }} component={TestScreen} />
+            <Tab.Screen name="Detail" options={{title: ()=>{return(<Text style={{color: !isDarkMode ? "#000000" : "white",fontWeight: 'bold'}}>{isPortrait?("Configuración"):("")}</Text>)} , headerTitle: (props) => <LogoTitle {...props} /> }} component={DetailScreen} />
         </Tab.Navigator>
     ); 
 }

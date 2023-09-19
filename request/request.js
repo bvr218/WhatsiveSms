@@ -64,6 +64,19 @@ export const functions = {
             console.log(error);
             return {salida:"error"};
         }
+    },
+
+    addMonth: async function(){
+        let port = await AsyncStorage.getItem('port'); 
+        let token = await AsyncStorage.getItem('key'); 
+        try {
+            const response = await axios.get(
+                "https://api.whatsive.com/api/v1/smsInstancia?action=addMonth&token="+token+"&id="+port
+              );
+              return {salida:"exito",response:response.data};
+        } catch(error){
+            return {salida:"error"};
+        }
     }
 
 }

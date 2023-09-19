@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useContext } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert, ToastAndroid  } from 'react-native';
-import { check, request, PERMISSIONS, RESULTS } from 'react-native-permissions';
+import { View, Text, TouchableOpacity, TextInput, ScrollView, Alert, ToastAndroid, Linking  } from 'react-native';
+import { check, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './styles/DetailScreenStyle';
+import {PermissionsAndroid,useColorScheme} from 'react-native';
 import ModalI from './modals/ModalCharging';
+
 import { functions as fc } from "../request/request";
 import { Context } from './context/Context';
 
@@ -71,59 +73,104 @@ function DetailScreen() {
     try {
       const result = await check(PERMISSIONS.ANDROID.SEND_SMS);
       if(result === RESULTS.GRANTED){
-        ToastAndroid.show('Los permisos ya estan listos, continua con el paso 2.', ToastAndroid.SHORT);
+        const result2 = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+        if(result2){
+          ToastAndroid.show('Los permisos ya estan listos, continua con el paso 2.', ToastAndroid.SHORT);
+          Alert.alert(
+            'Permiso adicional',
+            'Para poder ejecutar tareas de fondo permita que la app se muestre sobre otras apps, ademas retire la restriccion de bateria.',
+            [
+              { text: 'Aceptar', onPress: solicitarPermisos2 },
+              { text: 'Cancelar', onPress: ()=>{} },
+            ],
+            { cancelable: true }
+          );
+        }else{
+          PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
+        }  
       }else{
-        Alert.alert(
-          'Sin permisos',
-          'Aun no estamos listos para enviar mensajes, presiona aceptar y configura los permisos.',
-          [
-            { text: 'Aceptar', onPress: solicitarPermisos },
-            { text: 'Cancelar', onPress: ()=>{} },
-          ],
-          { cancelable: true }
-        );
+        solicitarPermisos();
       }
     } catch (error) {
       console.warn('Error al verificar permisos:', error);
     }
   }
-  const solicitarPermisos = async ()=>{
+  const solicitarPermisos2 = async function(){
     try {
-      const result = await request(PERMISSIONS.ANDROID.SEND_SMS);
-      if(result === RESULTS.GRANTED){
+      await Linking.openSettings();
+    } catch (error) {
+      console.error('Error al abrir la configuración de la aplicación:', error);
+    }
+  
+ }
+  
+  const solicitarPermisos = async () => {
+    try {
+      const sendSmsResult = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.SEND_SMS
+      );
+
+      if (sendSmsResult === PermissionsAndroid.RESULTS.GRANTED) {
         ToastAndroid.show('Permiso para enviar SMS concedido', ToastAndroid.SHORT);
-      }else{
-        solicitarPermisos()
+      } else {
+        ToastAndroid.show('Permiso para enviar SMS denegado', ToastAndroid.SHORT);
       }
+
+      const postNotificationsResult = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
+
+      if (postNotificationsResult === PermissionsAndroid.RESULTS.GRANTED) {
+        ToastAndroid.show('Permiso para notificaciones concedido', ToastAndroid.SHORT);
+      } else {
+        ToastAndroid.show('Permiso para notificaciones denegado', ToastAndroid.SHORT);
+      }
+
+      Alert.alert(
+        'Permiso adicional',
+        'Para poder ejecutar tareas de fondo permita que la app se muestre sobre otras apps, ademas retire la restriccion de bateria.',
+        [
+          { text: 'Aceptar', onPress: solicitarPermisos2 },
+          { text: 'Cancelar', onPress: ()=>{} },
+        ],
+        { cancelable: true }
+      );
+      saveChanges();
+      
     } catch (error) {
       console.warn('Error al solicitar permisos:', error);
     }
-  }
+};
   const handleChangePort = (port)=>{
-    setPort(port);
+    setPort(port.replace(/[^0-9]/g, ''));
   }
   const handleChangeToken = (port)=>{
     setKey(port);
   }
-
+  const isDarkMode = useColorScheme() === 'dark';
+  if(isDarkMode){
+    styles.Title = styles.Titleb;
+    styles.SubTitle = styles.SubTitleb;
+    styles.SubTitle1 = styles.SubTitle1b;
+  }
   return (
     <ScrollView style={{paddingHorizontal:10}}>
       <View>
         <Text style={styles.Title}>Pasos para instalar:</Text>
         <Text style={styles.SubTitle}>Para poder hacer uso de esta Api hemos organizado para usted estos sencillos pasos:</Text>
-        <Text>1.Permitale a la app enviar mensajes de texto. por su seguridad solo solicitamos permisos de envio, no de lectura.</Text>
+        <Text style={{color: !isDarkMode ? "#000000" : "white"}}>1.Permitale a la app enviar mensajes de texto. por su seguridad solo solicitamos permisos de envio, no de lectura.</Text>
         <Text style={styles.SubTitle1}>-Para hacerlo haga click en el siguiente boton</Text>
         <View style={styles.ButtonContainer}>
           <TouchableOpacity
           style={styles.Button}
           onPress={revisarPermisos}
-          ><Text style={{marginLeft:6}}>Habilitar permisos</Text></TouchableOpacity>
+          ><Text style={{color: !isDarkMode ? "white" : "white",marginLeft:6, marginTop:2}}>Habilitar permisos</Text></TouchableOpacity>
         </View>
-        <Text>2.Ingrese los datos de su instancia, recuerde que para poder acceder a este beneficio su instancia debe ser de pago.</Text>
+        <Text style={{color: !isDarkMode ? "#000000" : "white"}}>2.Ingrese los datos de su instancia.</Text>
         <View style={{justifyContent: 'center',alignItems: 'center'}}>
           <View style={styles.containerInputs}>
-            <View accessible={true} accessibilityLabel="Doble click para editar el aidi de la instancia" style={styles.containerDatos}>
-              <Text style={{width:70,top:10}}>ID:</Text>
+            <View accessible={true} accessibilityLabel="Editar puerto" style={styles.containerDatos}>
+              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>ID:</Text>
               <TextInput
                 style={styles.input}
                 ref={IdInput}
@@ -131,8 +178,8 @@ function DetailScreen() {
                 value={port}
               />
             </View>
-            <View accessible={true} accessibilityLabel="Doble click para editar el token de la instancia" style={styles.containerDatos}>
-              <Text style={{width:70,top:10}}>Token:</Text>
+            <View accessible={true} accessibilityLabel="Editar aidi" style={styles.containerDatos}>
+              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>Token:</Text>
               <TextInput
                 style={styles.input}
                 ref={TokenInput}
@@ -144,11 +191,11 @@ function DetailScreen() {
               <TouchableOpacity
                 style={styles.Button}
                 onPress={saveChanges}
-                ><Text style={{marginLeft:6}}>Guardar Cambios</Text></TouchableOpacity>
+                ><Text style={{color: !isDarkMode ? "white" : "white",marginLeft:6, marginTop:2}}>Guardar Cambios</Text></TouchableOpacity>
             </View>
           </View>
         </View>
-        <Text>Haga click en guardar una vez haya realizado los cambios, si la informacion es correcta, puede volver a inicio.</Text>
+        <Text style={{color: !isDarkMode ? "#000000" : "white"}}>Haga click en guardar una vez haya realizado los cambios, si la informacion es correcta, puede volver a inicio.</Text>
       </View>
       <ModalI/>
     </ScrollView>

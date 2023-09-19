@@ -1,4 +1,4 @@
-import { NativeModules, ToastAndroid } from 'react-native';
+import { NativeModules, ToastAndroid,Alert } from 'react-native';
 import BackgroundJob from 'react-native-background-actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { functions as fc } from '../request/request';
@@ -55,6 +55,18 @@ const cargarMensajes = async ()=>{
         AsyncStorage.removeItem("sms");
         mensajes = salida.response.sms;
         AsyncStorage.setItem("sms",JSON.stringify(mensajes));
+      }else{
+        Alert.alert(
+            'Datos invalidos',
+            salida.response.message,
+            [
+              { text: 'Aceptar', onPress: ()=>{} },
+            ],
+            { cancelable: true }
+        );
+        setIsRunning(false);
+        ToastAndroid.show('Error de conexion, se cerro el trabajo de fondo', ToastAndroid.SHORT);
+        await BackgroundJob.stop();
       }
     }else{
         setIsRunning(false);

@@ -3,6 +3,7 @@ import { View, Text } from "react-native";
 import styles from "../styles/HomeScreenStyles";
 import { functions as fc } from "../../request/request";
 
+
  function InfoSend(){
 
     const [send, setSend] = useState(0);
@@ -49,14 +50,14 @@ import { functions as fc } from "../../request/request";
                 <View accessible={true} accessibilityLabel={send+" Mensajes enviados hoy"} style={styles.boxInfo}>
                     <View style={styles.boxNumber}>
                         <Text style={styles.number}>{send}</Text>
-                        <Text style={{textAlign:"center"}}>sms</Text>
+                        <Text style={{textAlign:"center",color:"white"}}>sms</Text>
                     </View>
                     <Text style={styles.textInfo}>Enviados hoy</Text>
                 </View>
                 <View accessible={true} accessibilityLabel={wait+" Mensajes pendientes de enviar"} style={styles.boxInfo}>
                     <View style={styles.boxNumber}>
                         <Text style={styles.number}>{wait}</Text>
-                        <Text style={{textAlign:"center"}}>sms</Text>
+                        <Text style={{textAlign:"center",color:"white"}}>sms</Text>
                     </View>
                     <Text style={styles.textInfo}>Sin enviar</Text>
                 </View>
