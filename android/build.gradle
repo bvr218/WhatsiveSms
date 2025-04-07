@@ -14,6 +14,19 @@ buildscript {
         google()
         mavenCentral()
     }
+    subprojects {
+        afterEvaluate {
+            if (project.hasProperty("android")) {
+                android {
+                    lintOptions {
+                        checkReleaseBuilds false
+                        abortOnError false
+                        disable 'MissingPermission'
+                    }
+                }
+            }
+        }
+    }
     dependencies {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")

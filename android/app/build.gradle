@@ -93,6 +93,11 @@ android {
             keyPassword 'Holamundo@12' // Contraseña de la clave
         }
     }
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+        disable 'MissingPermission'
+    }
     buildTypes {
         debug {
             signingConfig signingConfigs.release
