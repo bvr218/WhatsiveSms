@@ -18,7 +18,7 @@ export default function Navbar(){
               style={styles.image}
               source={require('../../public/logo.png')}
             />
-            <Text style={styles.text}>Whatsive SMS</Text>
+            <Text style={styles.text}>MikrotispSms</Text>
           </View>
         );
     }

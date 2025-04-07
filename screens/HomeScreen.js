@@ -109,10 +109,10 @@ function HomeScreen({ navigation }) {
       <View>
 
         <View style={backgroundStyle}>
-          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter, fontSize:25, marginTop:20}}>Bienvenido a WHATSIVE</Text>
+          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter, fontSize:25, marginTop:20}}>Bienvenido a MIKROTISPSMS</Text>
         </View>
         <View style={{marginTop:20, marginHorizontal:10}}>
-          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter,fontSize:15}}>Por favor sigue estas instrucciones: </Text>
+          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter,fontSize:15}}>Configura la instancia en el boton de configuración. </Text>
           
           <View style={{justifyContent:"center",alignItems:"center"}}>
           <View style={style.centeredView}>
@@ -126,7 +126,7 @@ function HomeScreen({ navigation }) {
               }}>
               <View style={style.centeredView}>
                 <View style={style.modalView}>
-                  <TouchableOpacity activeOpacity={1} onPress={handleVideoPress}>
+                  {/* <TouchableOpacity activeOpacity={1} onPress={handleVideoPress}>
                     <Video source={require("../public/video_whatsive.mp4")}   // Can be a URL or a local file.
                       ref={videoPlayerRef}                                           // Store reference
                       onBuffer={this.onBuffer}  
@@ -148,7 +148,7 @@ function HomeScreen({ navigation }) {
                         onPress={() => setModalVisible(!modalVisible)}>
                         <Text style={[style.textStyle,{color:"black"}]}>X</Text>
                       </TouchableOpacity>)}
-                  </TouchableOpacity>
+                  </TouchableOpacity> */}
                 </View>
                 {
                   buttonsVisible && (

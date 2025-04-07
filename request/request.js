@@ -5,7 +5,7 @@ export const functions = {
     validaInstancia: async function(port,token){
         try {
             const response = await axios.get(
-              "https://api.whatsive.com/api/v1/smsInstancia?action=getInstancia&token="+token+"&id="+port
+              "https://mikrotisp.net/WhatispSMS/?action=getInstancia&token="+token+"&id="+port
             );
             return {salida:"exito",response:response.data};
         } catch (error) {
@@ -18,7 +18,7 @@ export const functions = {
         let token = await AsyncStorage.getItem('key'); 
         try {
             const response = await axios.get(
-                "https://api.whatsive.com/api/v1/smsInstancia?action=getMessages&token="+token+"&id="+port
+                "https://mikrotisp.net/WhatispSMS/?action=getMessages&token="+token+"&id="+port
               );
               return {salida:"exito",response:response.data};
         } catch(error){
@@ -31,7 +31,7 @@ export const functions = {
         let token = await AsyncStorage.getItem('key'); 
         try {
             const response = await axios.get(
-                "https://api.whatsive.com/api/v1/smsInstancia?action=countSendsSms&token="+token+"&id="+port
+                "https://mikrotisp.net/WhatispSMS/?action=countSendsSms&token="+token+"&id="+port
               );
               return {salida:"exito",response:response.data};
         } catch(error){
@@ -44,7 +44,7 @@ export const functions = {
         let token = await AsyncStorage.getItem('key'); 
         try {
             const response = await axios.get(
-                "https://api.whatsive.com/api/v1/smsInstancia?action=countWaitSms&token="+token+"&id="+port
+                "https://mikrotisp.net/WhatispSMS/?action=countWaitSms&token="+token+"&id="+port
               );
               return {salida:"exito",response:response.data};
         } catch(error){
@@ -57,7 +57,7 @@ export const functions = {
         let token = await AsyncStorage.getItem('key'); 
         try {
             const response = await axios.get(
-                "https://api.whatsive.com/api/v1/smsInstancia?action=markSend&token="+token+"&id="+port+"&idM="+id
+                "https://mikrotisp.net/WhatispSMS/?action=markSend&token="+token+"&id="+port+"&idM="+id
               );
               return {salida:"exito",response:response.data};
         } catch(error){
@@ -71,7 +71,7 @@ export const functions = {
         let token = await AsyncStorage.getItem('key'); 
         try {
             const response = await axios.get(
-                "https://api.whatsive.com/api/v1/smsInstancia?action=addMonth&token="+token+"&id="+port
+                "https://mikrotisp.net/WhatispSMS/?action=addMonth&token="+token+"&id="+port
               );
               return {salida:"exito",response:response.data};
         } catch(error){

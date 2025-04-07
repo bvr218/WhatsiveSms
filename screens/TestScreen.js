@@ -38,11 +38,11 @@ function TestScreen() {
   }
 
   const handleChangeText = () =>{
-    setLinkUrl(`https://api.whatsive.com/api/v1/sendMessage/?token=${token}&id=${id}&recipient=${destinatario}&type=sms&body=${body}`);
+    setLinkUrl(`https://mikrotisp.net/WhatispSMS/?id=${id}&recipient=${destinatario}&type=sms&body=${body}`);
   }
 
   useEffect(()=>{
-    setLinkUrl(`https://api.whatsive.com/api/v1/sendMessage/?token=${token}&id=${id}&recipient=${destinatario}&type=sms&body=${body}`);
+    setLinkUrl(`https://mikrotisp.net/WhatispSMS/?id=${id}&recipient=${destinatario}&type=sms&body=${body}`);
   });
 
   return (
@@ -50,7 +50,7 @@ function TestScreen() {
       <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter, fontSize:25, marginTop:20}}>Probar envio de mensajes</Text>
       
       <View style={{marginTop:15, marginHorizontal:10}}>
-          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter,fontSize:15}}>Cambie los datos abajo para ver ejemplos reales de peticion, le sugerimos usar el indicativo de pais (57 para Colombia)</Text>
+          <Text style={{color: !isDarkMode ? Colors.darker : Colors.lighter,fontSize:15}}>Cambie los datos abajo para ver ejemplos reales de peticion, le sugerimos usar el indicativo de pais (593 para Ecuador)</Text>
       </View>
       <View style={{justifyContent: 'center',alignItems: 'center'}}>
 

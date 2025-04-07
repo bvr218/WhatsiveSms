@@ -142,7 +142,7 @@ function DetailScreen() {
     }
 };
   const handleChangePort = (port)=>{
-    setPort(port.replace(/[^0-9]/g, ''));
+    setPort(port);
   }
   const handleChangeToken = (port)=>{
     setKey(port);
@@ -170,7 +170,7 @@ function DetailScreen() {
         <View style={{justifyContent: 'center',alignItems: 'center'}}>
           <View style={styles.containerInputs}>
             <View accessible={true} accessibilityLabel="Editar puerto" style={styles.containerDatos}>
-              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>ID:</Text>
+              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>Correo:</Text>
               <TextInput
                 style={styles.input}
                 ref={IdInput}
@@ -179,7 +179,7 @@ function DetailScreen() {
               />
             </View>
             <View accessible={true} accessibilityLabel="Editar aidi" style={styles.containerDatos}>
-              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>Token:</Text>
+              <Text style={{color: !isDarkMode ? "#000000" : "white",width:70,top:10}}>Lic:</Text>
               <TextInput
                 style={styles.input}
                 ref={TokenInput}
