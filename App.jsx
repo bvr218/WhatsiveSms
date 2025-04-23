@@ -15,13 +15,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 function App() {
 
   const firebaseConfig = {
-    apiKey: "AIzaSyBBmJinEnmxh2QyMzanQT-EgSx2Xu5HBec",
-    authDomain: "gleaming-design-350716.firebaseapp.com",
-    projectId: "gleaming-design-350716",
-    storageBucket: "gleaming-design-350716.appspot.com",
-    messagingSenderId: "429162633258",
-    appId: "1:429162633258:android:feaa9cc8e812a41ed34b53",
-    databaseURL: 'https://gleaming-design-350716-default-rtdb.firebaseio.com/'
+    apiKey: "{apikey}",
+    authDomain: "{authdomain}",
+    projectId: "{projectid}",
+    storageBucket: "{storageBucket}",
+    messagingSenderId: "{messaginSenderId}",
+    appId: "{appId}",
+    databaseURL: '{databaseUrl}'
   };
   
 if (!firebase.apps.length) {
